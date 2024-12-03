@@ -33,5 +33,3 @@ def decryptage(encrypted_val):
 
 if __name == "__main":
     app.run(debug=True)
-
-  app.run(debug=True)
