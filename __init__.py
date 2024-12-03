@@ -3,32 +3,30 @@ from flask import Flask, rendertemplate, jsonify
 
 app = Flask(name)
 
-Clé de chiffrement/déchiffrement
-key = Fernet.generatekey()
-f = Fernet(key)
-
 @app.route('/')
 def helloworld():
     return rendertemplate('hello.html')
 
-Route pour chiffrer une valeur
-@app.route('/encrypt/<string:valeur>')
-def encryptage(valeur):
-    valeur_bytes = valeur.encode()  # Conversion str -> bytes
-    token = f.encrypt(valeur_bytes)  # Chiffrement de la valeur
-    return f"Valeur encryptée : {token.decode()}"  # Retourne le token en str
-
-Nouvelle route pour déchiffrer une valeur via URL
-@app.route('/decrypt/<string:encrypted_val>')
-def decryptage(encrypted_val):
+Route pour chiffrer une valeur avec une clé privée manuelle
+@app.route('/encrypt/<string:key>/<string:valeur>')
+def encryptage(key, valeur):
     try:
-        # Conversion de la valeur chiffrée en bytes
-        encrypted_bytes = encrypted_val.encode()
-        # Déchiffrement de la valeur
-        decrypted_text = f.decrypt(encrypted_bytes).decode()
+        f = Fernet(key.encode())  # Crée un objet Fernet avec la clé fournie
+        valeurbytes = valeur.encode()  # Conversion str -> bytes
+        token = f.encrypt(valeur_bytes)  # Chiffrement de la valeur
+        return f"Valeur encryptée : {token.decode()}"  # Retourne le token en str
+    except Exception as e:
+        return f"Erreur : {str(e)}", 400
+
+Route pour déchiffrer une valeur avec une clé privée manuelle
+@app.route('/decrypt/<string:key>/<string:encrypted_val>')
+def decryptage(key, encrypted_val):
+    try:
+        f = Fernet(key.encode())  # Crée un objet Fernet avec la clé fournie
+        encrypted_bytes = encrypted_val.encode()  # Conversion str -> bytes
+        decrypted_text = f.decrypt(encrypted_bytes).decode()  # Déchiffrement
         return f"Valeur décryptée : {decrypted_text}"
     except Exception as e:
-        # Gestion des erreurs, par ex. si le texte est invalide
         return f"Erreur : {str(e)}", 400
 
 if __name == "__main":
