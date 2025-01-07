@@ -1,0 +1,43 @@
+EFREI_CryptoPython/
+├── app/
+│   ├── static/
+│   ├── templates/
+│   │   ├── exercice1.html
+│   │   ├── exercice2.html
+│   │   ├── ...
+│   ├── __init__.py
+│   └── routes.py
+├── run.py
+└── requirements.txt
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/exercice1')
+def exercice1():
+    return render_template('exercice1.html')
+
+@app.route('/exercice2')
+def exercice2():
+    return render_template('exercice2.html')
+
+@app.route('/exerciceX')
+def exerciceX():
+    return render_template('exerciceX.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 1</title>
+</head>
+<body>
+    <h1>Titrage</h1>
+    <p><b>Texte en gras</b>, <i>texte en italique</i>, <u>texte souligné</u>.</p>
+    <p><a href="actualite.html">Lien vers une autre page</a></p>
+    <p><a href="mailto:exemple@domaine.com">Envoyer un email</a></p>
+</body>
+</html>
